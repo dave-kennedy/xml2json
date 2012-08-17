@@ -1,0 +1,28 @@
+﻿<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title></title>
+        <style></style>
+    </head>
+    <body>
+        <script src="jLoader.js"></script>
+        <script src="xml2json.js"></script>
+        <script>
+            (function () {
+                // ECMAScript 5 strict mode
+                'use strict';
+
+                jLoader.ajax({
+                    url: 'data.xml',
+                    success: function (xml) {
+                        var json = xml2json.parse(xml);
+
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                    }
+                });
+            }());
+        </script>
+    </body>
+</html>

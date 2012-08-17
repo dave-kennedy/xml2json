@@ -1,0 +1,17 @@
+<tests>
+    <test difficulty="Easy" fruitPunch="Provided">
+        <name>Test 1</name>
+        <description>A test of strength</description>
+    </test>
+    <test difficulty="Hard">
+        <name>Test 2</name>
+        <description>A test of facial hair</description>
+    </test>
+    <test>Test 3</test>
+    <newTest>New Test 1</newTest>
+    <newTest>New Test 2</newTest>
+    <newTest>
+        <name>New Test 3</name>
+        <description></description>
+    </newTest>
+</tests>
