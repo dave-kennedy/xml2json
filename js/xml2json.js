@@ -2,6 +2,15 @@
     // ECMAScript 5 strict mode
     'use strict';
 
+    // http://blog.stevenlevithan.com/archives/faster-trim-javascript
+    function trim(str) {
+        var	str = str.replace(/^\s\s*/, ''),
+            ws = /\s/,
+            i = str.length;
+        while (ws.test(str.charAt(--i)));
+        return str.slice(0, i + 1);
+    }
+
     var module = {
         addNode: function (node, obj) {
             var i, obj = obj || {};
@@ -17,7 +26,7 @@
                     obj = this.domToObj(node.children[i], obj);
                 }
             } else {
-                obj = node.textContent;
+                obj = trim(node.textContent);
             }
 
             return obj;
