@@ -16,10 +16,10 @@
             var i, obj = obj || {};
 
             if (node.attributes.length) {
-                obj['_attr'] = {};
+                obj['ª'] = {};
 
                 for (i = 0; i < node.attributes.length; i++) {
-                    obj['_attr'][node.attributes[i].nodeName] = node.attributes[i].nodeValue;
+                    obj['ª'][node.attributes[i].nodeName] = node.attributes[i].nodeValue;
                 }
             }
 
@@ -28,13 +28,13 @@
                     obj = this.domToObj(node.children[i], obj);
                 }
             } else {
-                obj['_txt'] = trim(node.textContent);
+                obj['º'] = trim(node.textContent);
             }
 
             return obj;
         },
         domToObj: function (node, obj) {
-            var i, j;
+            var j;
 
             if (obj[node.nodeName] instanceof Array) {
                 j = obj[node.nodeName].length;
