@@ -16,10 +16,10 @@
             var i, obj = obj || {};
 
             if (node.attributes.length) {
-                obj['ª'] = {};
+                obj['_attr'] = {};
 
                 for (i = 0; i < node.attributes.length; i++) {
-                    obj['ª'][node.attributes[i].nodeName] = node.attributes[i].nodeValue;
+                    obj['_attr'][node.attributes[i].nodeName] = node.attributes[i].nodeValue;
                 }
             }
 
@@ -28,7 +28,7 @@
                     obj = this.domToObj(node.children[i], obj);
                 }
             } else {
-                obj['º'] = trim(node.textContent);
+                obj['_text'] = trim(node.textContent);
             }
 
             return obj;

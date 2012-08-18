@@ -14,7 +14,7 @@ I know there are several of these out there already, but I wasn't very happy wit
 
 4. were slow, with the exception of [Stefan Goessner's](http://www.goessner.net/download/prj/jsonxml/) implementation as well as [Michael Schoeler's](http://www.xn--schler-dya.net/blog/oenskelister/michaels-onskeliste/) (which was based on Goessner's). Those methods were fast but had the annoyances listed above. This method is also highly optimized.
 
-5. used invalid symbols to identify attributes and text, such as an ampersand or a pound sign. This method uses the feminine ordinal (ª or alt166 on Windows) to identify attributes and the masculine ordinal (º or alt167 on Windows) to identify text, so there's no chance of them conflicting with other scripts.
+5. used invalid symbols to identify attributes and text, such as an ampersand or a pound sign. This method uses and underscore to identify attributes and text.
 
 I don't mean to suggest that other methods, such as those by Goessner or Schoeler, are bad. They just didn't work like I expected them to, so I created my own.
 
@@ -39,26 +39,26 @@ After including the JS file, pass the raw XML (as a string) to the parser:
     {
         'tests': {
             'test': {
-                'ª': {
+                '_attr': {
                     'difficulty': 'Easy'
                 }
                 'name': {
-                    'º': 'Test 1'
+                    '_text': 'Test 1'
                 }
                 'description': {
-                    'º': 'A test of strength'
+                    '_text': 'A test of strength'
                 }
             }
         }
     }
 
-As mentioned above, the JSON object that is returned is not a string, so you can start manipulating it right away. Again, text nodes are identified with the masculine ordinal character, so you can access it like this:
+As mentioned above, the JSON object that is returned is not a string, so you can start manipulating it right away. You can access text nodes like this:
 
-    json.tests.test.name.º;
+    json.tests.test.name._text;
 
-Attributes are identified by the feminine ordinal character, which is an object. You can access attribute text like this:
+... and you can access attributes like this:
 
-    json.tests.test.ª.difficulty;
+    json.tests.test._attr.difficulty;
 
 If you'd rather have it as a string, use the browser's built in JSON object's stringify method:
 
@@ -80,21 +80,21 @@ Even with an unpredictable XML file, the JSON object is predictable and clean:
         'tests': {
             'test': [
                 {
-                    'ª': {
+                    '_attr': {
                         'difficulty': 'Easy'
                     }
                     'name': {
-                        'º': 'Test 1'
+                        '_text': 'Test 1'
                     }
                 },
                 {
-                    'º': 'Test 2'
+                    '_text': 'Test 2'
                 },
                 {
-                    'ª': {
+                    '_attr': {
                         'name': 'Test 3'
                     },
-                    'º': ''
+                    '_text': ''
                 }
             ]
         }
