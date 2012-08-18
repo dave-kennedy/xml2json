@@ -8,6 +8,6 @@ I know there are several of these out there already, but I wasn't very happy wit
 
 4. were slow, with the exception of [Stefan Goessner's](http://www.goessner.net/download/prj/jsonxml/) implementation as well as [Michael Schoeler's](http://www.xn--schler-dya.net/blog/oenskelister/michaels-onskeliste/) (which was based on Goessner's). Those methods were fast but had the annoyances listed above. This method is also highly optimized.
 
-5. returned a bunch of garbage in the JSON object, like `#text` and `\n    \n`. This method doesn't.
+5. used invalid identifiers such as an ampersand on attributes and a pound symbol on text. This method prefaces attributes and text with an underscore.
 
 I don't mean to suggest that other methods, such as those by Goessner or Schoeler, are bad. They just didn't work like I expected them to, so naturally I created my own. Please feel free to let me know if you find this method helpful, if you find any bugs, or if you have any suggestions in general.
