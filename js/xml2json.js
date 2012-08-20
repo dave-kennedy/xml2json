@@ -12,8 +12,8 @@
     }
 
     var module = {
-        addNode: function (node, obj) {
-            var i, obj = obj || {};
+        addNode: function (node) {
+            var i, obj = {};
 
             if (node.attributes.length) {
                 obj['_attr'] = {};
@@ -39,13 +39,13 @@
             if (obj[node.nodeName] instanceof Array) {
                 j = obj[node.nodeName].length;
 
-                obj[node.nodeName][j] = this.addNode(node, obj[node.nodeName][j]);
+                obj[node.nodeName][j] = this.addNode(node);
             } else if (obj[node.nodeName]) {
                 obj[node.nodeName] = [obj[node.nodeName]];
 
-                obj[node.nodeName][1] = this.addNode(node, obj[node.nodeName][1]);
+                obj[node.nodeName][1] = this.addNode(node);
             } else {
-                obj[node.nodeName] = this.addNode(node, obj[node.nodeName]);
+                obj[node.nodeName] = this.addNode(node);
             }
 
             return obj;
