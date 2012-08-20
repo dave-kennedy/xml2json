@@ -25,7 +25,7 @@
 
             if (node.children.length) {
                 for (i = 0; i < node.children.length; i++) {
-                    obj = this.domToObj(node.children[i], obj);
+                    obj = this.nodeToObj(node.children[i], obj);
                 }
             } else {
                 obj['_text'] = trim(node.textContent);
@@ -33,8 +33,8 @@
 
             return obj;
         },
-        domToObj: function (node, obj) {
-            var j;
+        nodeToObj: function (node, obj) {
+            var j, obj = obj || {};
 
             if (obj[node.nodeName] instanceof Array) {
                 j = obj[node.nodeName].length;
@@ -51,17 +51,11 @@
             return obj;
         },
         parse: function (xml) {
-            var json = {},
-                parser = new DOMParser(),
-                dom = parser.parseFromString(xml, 'text/xml');
+            var parser = new DOMParser(),
+                dom = parser.parseFromString(xml, 'text/xml'),
+                node = dom.documentElement;
 
-            if (dom.nodeType === 9) {
-                dom = dom.documentElement;
-            }
-
-            json = this.domToObj(dom, json);
-
-            return json;
+            return this.nodeToObj(node);
         }
     };
 
