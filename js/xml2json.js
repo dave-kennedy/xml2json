@@ -1,4 +1,8 @@
-﻿var xml2json = (function () {
+﻿// xml2json
+// by David Kennedy
+// http://daveden.wordpress.com/
+
+var xml2json = (function () {
     // ECMAScript 5 strict mode
     'use strict';
 
