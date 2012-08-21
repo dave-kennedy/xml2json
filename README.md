@@ -12,9 +12,9 @@ I know there are several of these out there already, but I wasn't very happy wit
 
 3. were sloppy. JSLint didn't like them, to say the least. This method conforms to JavaScript best practices. It also looks nice.
 
-4. were slow, with the exception of [Stefan Goessner's](http://www.goessner.net/download/prj/jsonxml/) implementation as well as [Michael Schoeler's](http://www.xn--schler-dya.net/blog/oenskelister/michaels-onskeliste/) (which was based on Goessner's). Those methods were fast but had the annoyances listed above. This method is also highly optimized.
+4. used invalid symbols to identify attributes and text, such as an ampersand or a pound sign. This method uses and underscore to identify attributes and text.
 
-5. used invalid symbols to identify attributes and text, such as an ampersand or a pound sign. This method uses and underscore to identify attributes and text.
+5. were slow, with the exception of [Stefan Goessner's](http://www.goessner.net/download/prj/jsonxml/) implementation as well as [Michael Schoeler's](http://www.xn--schler-dya.net/blog/oenskelister/michaels-onskeliste/) (which was based on Goessner's). Those methods were fast but had the annoyances listed above. This method is also highly optimized.
 
 I don't mean to suggest that other methods, such as those by Goessner or Schoeler, are bad. They just didn't work like I expected them to, so I created my own.
 
@@ -37,16 +37,16 @@ After including the JS file, pass the raw XML (as a string) to the parser:
 ... which returns:
 
     {
-        'tests': {
-            'test': {
-                '_attr': {
-                    'difficulty': 'Easy'
-                }
-                'name': {
-                    '_text': 'Test 1'
-                }
-                'description': {
-                    '_text': 'A test of strength'
+        "tests": {
+            "test": {
+                "_attr": {
+                    "difficulty": "Easy"
+                },
+                "name": {
+                    "_text": "Test 1"
+                },
+                "description": {
+                    "_text": "A test of strength"
                 }
             }
         }
@@ -67,9 +67,11 @@ If you'd rather have it as a string, use the browser's built in JSON object's st
 Here's how it works on a typical XML file, with multiples of each element:
 
     <tests>
+        Hi, I am some text.
         <test difficulty="Easy">
             <name>Test 1</name>
         </test>
+        I don't belong here!
         <test>Test 2</test>
         <test name="Test 3" />
     </tests>
@@ -77,30 +79,26 @@ Here's how it works on a typical XML file, with multiples of each element:
 Even with an unpredictable XML file, the JSON object is predictable and clean:
 
     {
-        'tests': {
-            'test': [
-                {
-                    '_attr': {
-                        'difficulty': 'Easy'
-                    }
-                    'name': {
-                        '_text': 'Test 1'
-                    }
+        "tests": {
+            "_text": ["Hi, I am some text.", "I don't belong here!"],
+            "test": [{
+                "_attr": {
+                    "difficulty": "Easy"
                 },
-                {
-                    '_text': 'Test 2'
-                },
-                {
-                    '_attr': {
-                        'name': 'Test 3'
-                    },
-                    '_text': ''
+                "name": {
+                    "_text": "Test 1"
                 }
-            ]
+            }, {
+                "_text": "Test 2"
+            }, {
+                "_attr": {
+                    "name": "Test 3"
+                }
+            }]
         }
     }
 
-As you can see, when there are multiple elements with the same name, the property becomes an array of objects.
+As you can see, when there are multiple elements with the same name, the property becomes an array of objects. In the case of text nodes, it becomes an array of strings. Text doesn't get lost, even when it's stuck in random places.
 
 ### Thanks
 

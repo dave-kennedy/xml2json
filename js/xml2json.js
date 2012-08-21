@@ -12,50 +12,64 @@
     }
 
     var module = {
-        addNode: function (node) {
-            var i, obj = {};
+        toJson: function (node) {
+            var i, json, obj;
 
-            if (node.attributes.length) {
-                obj['_attr'] = {};
-
-                for (i = 0; i < node.attributes.length; i++) {
-                    obj['_attr'][node.attributes[i].nodeName] = node.attributes[i].nodeValue;
-                }
+            if (!node.attributes.length && !node.childNodes.length) {
+                return;
             }
 
-            if (node.children.length) {
-                for (i = 0; i < node.children.length; i++) {
-                    obj = this.nodeToObj(node.children[i], obj);
-                }
-            } else {
-                obj['_text'] = trim(node.textContent);
+            obj = {};
+
+            for (i = 0; i < node.attributes.length; i++) {
+                obj._attr = obj._attr || {};
+                obj._attr[node.attributes[i].nodeName] = node.attributes[i].nodeValue;
             }
 
-            return obj;
-        },
-        nodeToObj: function (node, obj) {
-            var j, obj = obj || {};
+            for (i = 0; i < node.childNodes.length; i++) {
+                if (node.childNodes[i].nodeType === 1) {
+                    // Element node
+                    json = this.toJson(node.childNodes[i]);
 
-            if (obj[node.nodeName] instanceof Array) {
-                j = obj[node.nodeName].length;
-
-                obj[node.nodeName][j] = this.addNode(node);
-            } else if (obj[node.nodeName]) {
-                obj[node.nodeName] = [obj[node.nodeName]];
-
-                obj[node.nodeName][1] = this.addNode(node);
-            } else {
-                obj[node.nodeName] = this.addNode(node);
+                    if (json) {
+                        if (obj[node.childNodes[i].nodeName] instanceof Array) {
+                            obj[node.childNodes[i].nodeName].push(json);
+                        } else if (obj[node.childNodes[i].nodeName]) {
+                            obj[node.childNodes[i].nodeName] = [obj[node.childNodes[i].nodeName]];
+                            obj[node.childNodes[i].nodeName].push(json);
+                        } else {
+                            obj[node.childNodes[i].nodeName] = json;
+                        }
+                    }
+                } else if (node.childNodes[i].nodeType === 3 && trim(node.childNodes[i].textContent)) {
+                    // Text node
+                    if (obj._text instanceof Array) {
+                        obj._text.push(trim(node.childNodes[i].textContent));
+                    } else if (obj._text) {
+                        obj._text = [obj._text];
+                        obj._text.push(trim(node.childNodes[i].textContent));
+                    } else {
+                        obj._text = trim(node.childNodes[i].textContent);
+                    }
+                }
             }
 
             return obj;
         },
         parse: function (xml) {
-            var parser = new DOMParser(),
-                dom = parser.parseFromString(xml, 'text/xml'),
-                node = dom.documentElement;
+            var dom, json, obj, node, parser;
 
-            return this.nodeToObj(node);
+            parser = new DOMParser();
+            dom = parser.parseFromString(xml, 'text/xml');
+            node = dom.documentElement;
+            obj = {};
+            json = this.toJson(node);
+
+            if (json) {
+                obj[node.nodeName] = json;
+            }
+
+            return obj;
         }
     };
 
