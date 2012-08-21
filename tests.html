@@ -1,0 +1,257 @@
+﻿<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title></title>
+        <style></style>
+    </head>
+    <body>
+        <script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+        <script src="js/xml2json.js"></script>
+        <script>
+            (function () {
+                // ECMAScript 5 strict mode
+                'use strict';
+
+                YUI().use('test', function (Y) {
+                    var testCase1 = new Y.Test.Case({
+                        test1: function () {
+                            var xml = '<party />',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json);
+                            Y.Assert.areEqual(0, Object.keys(json).length);
+                        },
+                        test2: function () {
+                            var xml = '<party>This party is going to be off the hook!</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json);
+                            Y.Assert.areEqual(1, Object.keys(json).length);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party._text);
+                        },
+                        test3: function () {
+                            var xml = '<party juice="Unlimited" />',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json);
+                            Y.Assert.areEqual(1, Object.keys(json).length);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isObject(json.party._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party._attr.juice);
+                        },
+                        test4: function () {
+                            var xml = '<party juice="Unlimited">' +
+                                    'We have unlimited juice?' +
+                                    '<laugh />' +
+                                    'This party is going to be off the hook!' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json);
+                            Y.Assert.areEqual(1, Object.keys(json).length);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(2, Object.keys(json.party).length);
+
+                            Y.Assert.isObject(json.party._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party._attr.juice);
+
+                            Y.Assert.isArray(json.party._text);
+                            Y.Assert.areEqual(2, json.party._text.length);
+
+                            Y.Assert.areEqual('We have unlimited juice?', json.party._text[0]);
+
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party._text[1]);
+                        }
+                    });
+
+                    var testCase2 = new Y.Test.Case({
+                        test5: function () {
+                            var xml = '<party>' +
+                                    '<juice />' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(0, Object.keys(json.party).length);
+                        },
+                        test6: function () {
+                            var xml = '<party>' +
+                                    '<juice>This party is going to be off the hook!</juice>' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isObject(json.party.juice);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice).length);
+
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party.juice._text);
+                        },
+                        test7: function () {
+                            var xml = '<party>' +
+                                    '<juice quantity="Unlimited" />' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isObject(json.party.juice);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice).length);
+
+                            Y.Assert.isObject(json.party.juice._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party.juice._attr.quantity);
+                        },
+                        test8: function () {
+                            var xml = '<party>' +
+                                    '<juice quantity="Unlimited">' +
+                                        'We have unlimited juice?' +
+                                        '<laugh />' +
+                                        'This party is going to be off the hook!' +
+                                    '</juice>' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isObject(json.party.juice);
+                            Y.Assert.areEqual(2, Object.keys(json.party.juice).length);
+
+                            Y.Assert.isObject(json.party.juice._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party.juice._attr.quantity);
+
+                            Y.Assert.isArray(json.party.juice._text);
+                            Y.Assert.areEqual(2, json.party.juice._text.length);
+
+                            Y.Assert.areEqual('We have unlimited juice?', json.party.juice._text[0]);
+
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party.juice._text[1]);
+                        }
+                    });
+
+                    var testCase3 = new Y.Test.Case({
+                        test9: function () {
+                            var xml = '<party>' +
+                                    '<juice />' +
+                                    '<juice />' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(0, Object.keys(json.party).length);
+                        },
+                        test10: function () {
+                            var xml = '<party>' +
+                                    '<juice>We have unlimited juice?</juice>' +
+                                    '<juice>This party is going to be off the hook!</juice>' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isArray(json.party.juice);
+                            Y.Assert.areEqual(2, json.party.juice.length);
+
+                            Y.Assert.isObject(json.party.juice[0]);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[0]).length);
+
+                            Y.Assert.areEqual('We have unlimited juice?', json.party.juice[0]._text);
+
+                            Y.Assert.isObject(json.party.juice[1]);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[1]).length);
+
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party.juice[1]._text);
+                        },
+                        test11: function () {
+                            var xml = '<party>' +
+                                    '<juice composition="Corn syrup and red dye" />' +
+                                    '<juice quantity="Unlimited" />' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isArray(json.party.juice);
+                            Y.Assert.areEqual(2, json.party.juice.length);
+
+                            Y.Assert.isObject(json.party.juice[0]);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[0]).length);
+
+                            Y.Assert.isObject(json.party.juice[0]._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[0]._attr).length);
+
+                            Y.Assert.areEqual('Corn syrup and red dye', json.party.juice[0]._attr.composition);
+
+                            Y.Assert.isObject(json.party.juice[1]._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[1]._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party.juice[1]._attr.quantity);
+                        },
+                        test12: function () {
+                            var xml = '<party>' +
+                                    '<juice composition="Corn syrup and red dye">' +
+                                        'We have unlimited juice?' +
+                                    '</juice>' +
+                                    '<laugh />' +
+                                    '<juice quantity="Unlimited">' +
+                                        'This party is going to be off the hook!' +
+                                    '</juice>' +
+                                '</party>',
+                                json = xml2json.parse(xml);
+
+                            Y.Assert.isObject(json.party);
+                            Y.Assert.areEqual(1, Object.keys(json.party).length);
+
+                            Y.Assert.isArray(json.party.juice);
+                            Y.Assert.areEqual(2, json.party.juice.length);
+
+                            Y.Assert.isObject(json.party.juice[0]);
+                            Y.Assert.areEqual(2, Object.keys(json.party.juice[0]).length);
+
+                            Y.Assert.isObject(json.party.juice[0]._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[0]._attr).length);
+
+                            Y.Assert.areEqual('Corn syrup and red dye', json.party.juice[0]._attr.composition);
+                            Y.Assert.areEqual('We have unlimited juice?', json.party.juice[0]._text);
+
+                            Y.Assert.isObject(json.party.juice[1]);
+                            Y.Assert.areEqual(2, Object.keys(json.party.juice[1]).length);
+
+                            Y.Assert.isObject(json.party.juice[1]._attr);
+                            Y.Assert.areEqual(1, Object.keys(json.party.juice[1]._attr).length);
+
+                            Y.Assert.areEqual('Unlimited', json.party.juice[1]._attr.quantity);
+                            Y.Assert.areEqual('This party is going to be off the hook!', json.party.juice[1]._text);
+                        }
+                    });
+
+                    Y.Test.Runner.add(testCase1);
+                    Y.Test.Runner.add(testCase2);
+                    Y.Test.Runner.add(testCase3);
+                    Y.Test.Runner.run();
+                });
+            }());
+        </script>
+    </body>
+</html>

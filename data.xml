@@ -1,12 +1,9 @@
 <tests>
+    Hi, I am some text.
     <test difficulty="Easy">
         <name>Test 1</name>
-        <description>A test of strength</description>
-        <accommodations>Fruit punch</accommodations>
     </test>
-    <test difficulty="Hard">
-        <name>Test 2</name>
-        <description>A test of facial hair</description>
-    </test>
+    I don't belong here!
+    <test>Test 2</test>
     <test name="Test 3" />
 </tests>
