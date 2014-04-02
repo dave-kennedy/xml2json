@@ -1,7 +1,3 @@
-﻿// jLoader
-// by David Kennedy
-// http://daveden.wordpress.com/
-
 var jLoader = (function () {
     // ECMAScript 5 strict mode
     'use strict';
