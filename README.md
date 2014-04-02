@@ -1,6 +1,4 @@
 # xml2json
-## by David Kennedy
-## http://daveden.wordpress.com
 
 ### Why?
 
