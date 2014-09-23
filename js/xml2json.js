@@ -23,7 +23,7 @@ var xml2json = (function () {
 
             for (i = 0; i < node.attributes.length; i++) {
                 obj._attr = obj._attr || {};
-                obj._attr[node.attributes[i].nodeName] = node.attributes[i].nodeValue;
+                obj._attr[node.attributes[i].nodeName] = node.attributes[i].value;
             }
 
             for (i = 0; i < node.childNodes.length; i++) {
