@@ -2,13 +2,29 @@ var xml2json = (function () {
     // ECMAScript 5 strict mode
     'use strict';
 
-    // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-    function trim(str) {
-        var	str = str.replace(/^\s\s*/, ''),
-            ws = /\s/,
-            i = str.length;
-        while (ws.test(str.charAt(--i)));
-        return str.slice(0, i + 1);
+// http://blog.stevenlevithan.com/archives/faster-trim-javascript
+// This is trim 12
+//    function trim(str) {
+//        var   strg = str.replace(/^\s\s*/, ''),
+//            ws = /\s/,
+//            i = strg.length;
+//        while (ws.test(strg.charAt(--i)))
+//        return strg.slice(0, i + 1);
+//    }
+
+// trim28
+// http://jsperf.com/mega-trim-test/43
+     function trim(str) {
+        var c;
+        for (var i = 0, j = str.length; i < j; i++) {
+            c = str.charCodeAt(i);
+            if (c == 32 || c == 10 || c == 13 || c == 9 || c == 12) continue; else break;
+        }
+        for (j--; j >= i; j--) {
+            c = str.charCodeAt(j);
+            if (c == 32 || c == 10 || c == 13 || c == 9 || c == 12) continue; else break;
+        }
+        return str.substring(i, j + 1);
     }
 
     var module = {
@@ -23,7 +39,7 @@ var xml2json = (function () {
 
             for (i = 0; i < node.attributes.length; i++) {
                 obj._attr = obj._attr || {};
-                obj._attr[node.attributes[i].nodeName] = node.attributes[i].nodeValue;
+                obj._attr[node.attributes[i].nodeName] = node.attributes[i].value;
             }
 
             for (i = 0; i < node.childNodes.length; i++) {
