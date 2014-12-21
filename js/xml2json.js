@@ -2,15 +2,6 @@ var xml2json = (function () {
     // ECMAScript 5 strict mode
     'use strict';
 
-    // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-    function trim(str) {
-        var	str = str.replace(/^\s\s*/, ''),
-            ws = /\s/,
-            i = str.length;
-        while (ws.test(str.charAt(--i)));
-        return str.slice(0, i + 1);
-    }
-
     var module = {
         toJson: function (node) {
             var i, json, obj;
@@ -23,7 +14,7 @@ var xml2json = (function () {
 
             for (i = 0; i < node.attributes.length; i++) {
                 obj._attr = obj._attr || {};
-                obj._attr[node.attributes[i].nodeName] = node.attributes[i].nodeValue;
+                obj._attr[node.attributes[i].nodeName] = node.attributes[i].value;
             }
 
             for (i = 0; i < node.childNodes.length; i++) {
@@ -41,15 +32,15 @@ var xml2json = (function () {
                             obj[node.childNodes[i].nodeName] = json;
                         }
                     }
-                } else if (node.childNodes[i].nodeType === 3 && trim(node.childNodes[i].textContent)) {
+                } else if (node.childNodes[i].nodeType === 3 && node.childNodes[i].textContent.trim()) {
                     // Text node
                     if (obj._text instanceof Array) {
-                        obj._text.push(trim(node.childNodes[i].textContent));
+                        obj._text.push(node.childNodes[i].textContent.trim());
                     } else if (obj._text) {
                         obj._text = [obj._text];
-                        obj._text.push(trim(node.childNodes[i].textContent));
+                        obj._text.push(node.childNodes[i].textContent.trim());
                     } else {
-                        obj._text = trim(node.childNodes[i].textContent);
+                        obj._text = node.childNodes[i].textContent.trim();
                     }
                 }
             }
@@ -57,13 +48,11 @@ var xml2json = (function () {
             return obj;
         },
         parse: function (xml) {
-            var dom, json, obj, node, parser;
-
-            parser = new DOMParser();
-            dom = parser.parseFromString(xml, 'text/xml');
-            node = dom.documentElement;
-            obj = {};
-            json = this.toJson(node);
+            var parser = new DOMParser(),
+                dom = parser.parseFromString(xml, 'text/xml'),
+                node = dom.documentElement,
+                json = this.toJson(node),
+                obj = {};
 
             if (json) {
                 obj[node.nodeName] = json;
