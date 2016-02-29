@@ -98,6 +98,10 @@ Even with unpredictable XML, the JSON is nice and clean:
 
 As you can see, when there are multiple occurences of an element, the property becomes an array of objects. In the case of text nodes, it becomes an array of strings. Text doesn't get lost, even when it's stuck in random places.
 
+### Demo
+
+Right [here](http://dave-kennedy.github.io/xml2json).
+
 ### Thanks
 
 Credit goes to [Stefan Goessner](http://www.goessner.net/download/prj/jsonxml/), whose code I thoroughly scoured for good ideas, and to [Mathias Bynens](http://www.mathiasbynens.be/notes/javascript-identifiers) for his work with JavaScript variable names.
