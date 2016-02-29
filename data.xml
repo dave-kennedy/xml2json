@@ -1,9 +1,0 @@
-<tests>
-    Hi, I am some text.
-    <test difficulty="Easy">
-        <name>Test 1</name>
-    </test>
-    I don't belong here!
-    <test>Test 2</test>
-    <test name="Test 3" />
-</tests>
