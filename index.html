@@ -38,7 +38,7 @@
                     var xml = document.getElementById('xml').value,
                         json = xml2json.parse(xml);
 
-                    document.getElementById('json').value = JSON.stringify(json);
+                    document.getElementById('json').value = JSON.stringify(json, null, '  ');
                 }
 
                 var button = document.getElementById('parse');
